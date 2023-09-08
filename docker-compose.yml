@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  postgres-database:
+    container_name: 'postgres-database'
+    restart: always
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_PASSWORD=helloworld2002
+
+  document-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: 'document-management-api'
+    restart: always
+    environment:
+      - PORT=${PORT}
+    ports:
+      - 3000:3000
+    depends_on:
+      - postgres-database
+    volumes:
+      - ./src:/app/src
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
