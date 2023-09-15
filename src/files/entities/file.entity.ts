@@ -4,12 +4,15 @@ import {
   PrimaryGeneratedColumn,
   AfterLoad,
   AfterInsert,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Allow } from 'class-validator';
 import { EntityHelper } from 'src/utils/entity-helper';
 import appConfig from '../../config/app.config';
 import { AppConfig } from 'src/config/config.type';
+import { User } from 'src/users/entities/user.entity';
 
 @Entity({ name: 'file' })
 export class FileEntity extends EntityHelper {
@@ -20,6 +23,14 @@ export class FileEntity extends EntityHelper {
   @Allow()
   @Column()
   path: string;
+
+  @Column({ name: 'uploader_id', type: 'integer' })
+  uploaderId: number
+
+  @JoinColumn({ name: 'uploader_id' })
+  @ManyToOne(() => User, (uploader) => uploader.file)
+  uploader: User
+
 
   @AfterLoad()
   @AfterInsert()

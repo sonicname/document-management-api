@@ -30,6 +30,7 @@
     "prepare": "is-ci || husky install"
   },
   "dependencies": {
+    "@aws-sdk/abort-controller": "^3.374.0",
     "@aws-sdk/client-s3": "3.405.0",
     "@nestjs/common": "10.2.4",
     "@nestjs/config": "3.0.1",

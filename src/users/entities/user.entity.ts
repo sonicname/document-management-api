@@ -10,6 +10,7 @@ import {
   UpdateDateColumn,
   BeforeInsert,
   BeforeUpdate,
+  OneToMany
 } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
 import { Status } from '../../statuses/entities/status.entity';
@@ -68,10 +69,10 @@ export class User extends EntityHelper {
   @Column({ type: String, nullable: true })
   lastName: string | null;
 
-  @ManyToOne(() => FileEntity, {
+  @OneToMany(() => FileEntity, (file) => file.uploader, {
     eager: true,
   })
-  photo?: FileEntity | null;
+  file?: FileEntity[] | null;
 
   @ManyToOne(() => Role, {
     eager: true,

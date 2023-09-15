@@ -12,7 +12,7 @@ export class UsersService {
   constructor(
     @InjectRepository(User)
     private usersRepository: Repository<User>,
-  ) {}
+  ) { }
 
   create(createProfileDto: CreateUserDto): Promise<User> {
     return this.usersRepository.save(
@@ -42,6 +42,12 @@ export class UsersService {
         ...payload,
       }),
     );
+  }
+
+  async updatePhoto(photoId, userId) {
+    await this.usersRepository.query(`update "user"
+        set "photoId" = '${photoId}'
+        where id = ${userId}`);
   }
 
   async softDelete(id: User['id']): Promise<void> {
