@@ -7,15 +7,11 @@ import path from 'path';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { AuthModule } from './auth/auth.module';
 import appConfig from './config/app.config';
-import appleConfig from './config/apple.config';
 import authConfig from './config/auth.config';
 import { AllConfigType } from './config/config.type';
 import databaseConfig from './config/database.config';
-import facebookConfig from './config/facebook.config';
 import fileConfig from './config/file.config';
-import googleConfig from './config/google.config';
 import mailConfig from './config/mail.config';
-import twitterConfig from './config/twitter.config';
 import { TypeOrmConfigService } from './database/typeorm-config.service';
 import { FilesModule } from './files/files.module';
 import { ForgotModule } from './forgot/forgot.module';
@@ -29,23 +25,13 @@ import { UsersModule } from './users/users.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      load: [
-        databaseConfig,
-        authConfig,
-        appConfig,
-        mailConfig,
-        fileConfig,
-        facebookConfig,
-        googleConfig,
-        twitterConfig,
-        appleConfig,
-      ],
+      load: [databaseConfig, authConfig, appConfig, mailConfig, fileConfig],
       envFilePath: ['.env'],
     }),
     TypeOrmModule.forRootAsync({
       useClass: TypeOrmConfigService,
       dataSourceFactory: async (options: DataSourceOptions) => {
-        return await new DataSource(options).initialize();
+        return new DataSource(options).initialize();
       },
     }),
     I18nModule.forRootAsync({
