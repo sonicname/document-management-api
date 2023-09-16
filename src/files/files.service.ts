@@ -1,12 +1,12 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FileEntity } from './entities/file.entity';
-import { Repository } from 'typeorm';
 import { AllConfigType } from 'src/config/config.type';
 import { UsersService } from 'src/users/users.service';
 import { IPaginationOptions } from 'src/utils/types/pagination-options';
+import { IsNull, Repository } from 'typeorm';
 import { UpdateFileDto } from './dto/update-files.dtos';
+import { FileEntity } from './entities/file.entity';
 @Injectable()
 export class FilesService {
   constructor(
@@ -53,12 +53,11 @@ export class FilesService {
     paginationOptions: IPaginationOptions,
     uploaderId: FileEntity['uploaderId'],
   ): Promise<FileEntity[]> {
-    return this.fileRepository.query(`
-      select * from file
-      where uploader_id = '${uploaderId}'
-      limit ${paginationOptions.limit}
-      offset ${(paginationOptions.page - 1) * paginationOptions.limit}
-    `);
+    return this.fileRepository.find({
+      where: { deletedAt: IsNull(), uploaderId },
+      take: paginationOptions.limit,
+      skip: (paginationOptions.page - 1) * paginationOptions.limit,
+    });
   }
   async getOneById(id: FileEntity['id']): Promise<FileEntity> {
     const file = await this.fileRepository.query(
