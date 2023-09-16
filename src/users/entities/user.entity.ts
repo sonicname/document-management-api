@@ -10,7 +10,7 @@ import {
   UpdateDateColumn,
   BeforeInsert,
   BeforeUpdate,
-  OneToMany
+  OneToMany,
 } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity';
 import { Status } from '../../statuses/entities/status.entity';

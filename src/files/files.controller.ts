@@ -14,7 +14,8 @@ import {
   ParseIntPipe,
   HttpCode,
   HttpStatus,
-  Body
+  Body,
+  Delete,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
@@ -29,7 +30,7 @@ import { UpdateFileDto } from './dto/update-files.dtos';
   version: '1',
 })
 export class FilesController {
-  constructor(private readonly filesService: FilesService) { }
+  constructor(private readonly filesService: FilesService) {}
 
   @ApiBearerAuth()
   @UseGuards(AuthGuard('jwt'))
@@ -49,9 +50,9 @@ export class FilesController {
   @UseInterceptors(FileInterceptor('file'))
   async uploadFile(
     @UploadedFile() file: Express.Multer.File | Express.MulterS3.File,
-    @Req() req
+    @Req() req,
   ) {
-    const userId = req.user.id
+    const userId = req.user.id;
     return this.filesService.uploadFile(file, userId);
   }
 
@@ -62,18 +63,19 @@ export class FilesController {
   async findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-    @Req() req
+    @Req() req,
   ) {
     if (limit > 50) {
       limit = 50;
     }
-    console.log(req.user.id)
+    console.log(req.user.id);
     return infinityPagination(
-      await this.filesService.getFileWithPagination({
-        page,
-        limit
-      },
-        req.user.id
+      await this.filesService.getFileWithPagination(
+        {
+          page,
+          limit,
+        },
+        req.user.id,
       ),
       { page, limit },
     );
@@ -91,5 +93,11 @@ export class FilesController {
     @Body() updateFileDto: UpdateFileDto,
   ): Promise<FileEntity> {
     return this.filesService.update(id, updateFileDto);
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id') id: string): Promise<void> {
+    return this.filesService.softDelete(id);
   }
 }

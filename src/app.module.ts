@@ -1,4 +1,4 @@
-import { Module, NestModule, MiddlewareConsumer, } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HeaderResolver } from 'nestjs-i18n';
@@ -20,7 +20,6 @@ import { MailModule } from './mail/mail.module';
 import { MailerModule } from './mailer/mailer.module';
 import { SessionModule } from './session/session.module';
 import { UsersModule } from './users/users.module';
-import { JwtMiddleware } from './auth/middleware/jwt.middleware';
 
 @Module({
   imports: [
@@ -68,5 +67,4 @@ import { JwtMiddleware } from './auth/middleware/jwt.middleware';
     HomeModule,
   ],
 })
-export class AppModule { }
-
+export class AppModule {}

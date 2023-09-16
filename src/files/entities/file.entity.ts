@@ -25,12 +25,11 @@ export class FileEntity extends EntityHelper {
   path: string;
 
   @Column({ name: 'uploader_id', type: 'integer' })
-  uploaderId: number
+  uploaderId: number;
 
   @JoinColumn({ name: 'uploader_id' })
   @ManyToOne(() => User, (uploader) => uploader.file)
-  uploader: User
-
+  uploader: User;
 
   @AfterLoad()
   @AfterInsert()

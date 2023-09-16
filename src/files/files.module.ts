@@ -17,7 +17,7 @@ import { UsersModule } from 'src/users/users.module';
     UsersModule,
     TypeOrmModule.forFeature([FileEntity]),
     MulterModule.registerAsync({
-      imports: [ConfigModule,],
+      imports: [ConfigModule],
       inject: [ConfigService],
       useFactory: (configService: ConfigService<AllConfigType>) => {
         const storages = {
@@ -101,4 +101,4 @@ import { UsersModule } from 'src/users/users.module';
   controllers: [FilesController],
   providers: [ConfigModule, ConfigService, FilesService],
 })
-export class FilesModule { }
+export class FilesModule {}

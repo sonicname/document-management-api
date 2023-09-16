@@ -1,4 +1,4 @@
-import { Module, NestModule, MiddlewareConsumer, } from '@nestjs/common';
+import { Module, NestModule, MiddlewareConsumer } from '@nestjs/common';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { PassportModule } from '@nestjs/passport';
@@ -25,10 +25,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
     MailModule,
     JwtModule.registerAsync({
       imports: [ConfigModule],
-      useFactory: async (configService: ConfigService) => ({
-        secret: configService.get('auth.secret'),
+      useFactory: (configService: ConfigService) => ({
+        secret: configService.get('auth.secret', { infer: true }),
         signOptions: {
-          expiresIn: configService.get('auth.expires'),
+          expiresIn: configService.get('auth.expires', { infer: true }),
         },
       }),
       inject: [ConfigService],
