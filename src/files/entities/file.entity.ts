@@ -6,6 +6,9 @@ import {
   AfterInsert,
   ManyToOne,
   JoinColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+  DeleteDateColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Allow } from 'class-validator';
@@ -30,6 +33,15 @@ export class FileEntity extends EntityHelper {
   @JoinColumn({ name: 'uploader_id' })
   @ManyToOne(() => User, (uploader) => uploader.file)
   uploader: User;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
 
   @AfterLoad()
   @AfterInsert()
