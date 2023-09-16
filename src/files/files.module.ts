@@ -10,9 +10,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { FileEntity } from './entities/file.entity';
 import { FilesService } from './files.service';
 import { AllConfigType } from 'src/config/config.type';
+import { UsersModule } from 'src/users/users.module';
 
 @Module({
   imports: [
+    UsersModule,
     TypeOrmModule.forFeature([FileEntity]),
     MulterModule.registerAsync({
       imports: [ConfigModule],

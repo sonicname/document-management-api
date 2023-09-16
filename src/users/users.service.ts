@@ -44,6 +44,12 @@ export class UsersService {
     );
   }
 
+  async updatePhoto(photoId, userId) {
+    await this.usersRepository.query(`update "user"
+        set "photoId" = '${photoId}'
+        where id = ${userId}`);
+  }
+
   async softDelete(id: User['id']): Promise<void> {
     await this.usersRepository.softDelete(id);
   }
