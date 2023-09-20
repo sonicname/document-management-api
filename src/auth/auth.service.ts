@@ -4,33 +4,33 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import ms from 'ms';
-import { JwtService } from '@nestjs/jwt';
-import { User } from '../users/entities/user.entity';
-import bcrypt from 'bcryptjs';
-import { AuthEmailLoginDto } from './dto/auth-email-login.dto';
-import { AuthUpdateDto } from './dto/auth-update.dto';
 import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
-import { RoleEnum } from 'src/roles/roles.enum';
-import { StatusEnum } from 'src/statuses/statuses.enum';
-import crypto from 'crypto';
+import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
+import bcrypt from 'bcryptjs';
 import { plainToClass } from 'class-transformer';
-import { Status } from 'src/statuses/entities/status.entity';
-import { Role } from 'src/roles/entities/role.entity';
-import { AuthProvidersEnum } from './auth-providers.enum';
-import { SocialInterface } from 'src/social/interfaces/social.interface';
-import { AuthRegisterLoginDto } from './dto/auth-register-login.dto';
-import { UsersService } from 'src/users/users.service';
+import crypto from 'crypto';
+import ms from 'ms';
+import { AllConfigType } from 'src/config/config.type';
 import { ForgotService } from 'src/forgot/forgot.service';
 import { MailService } from 'src/mail/mail.service';
-import { NullableType } from '../utils/types/nullable.type';
-import { LoginResponseType } from './types/login-response.type';
-import { ConfigService } from '@nestjs/config';
-import { AllConfigType } from 'src/config/config.type';
-import { SessionService } from 'src/session/session.service';
-import { JwtRefreshPayloadType } from './strategies/types/jwt-refresh-payload.type';
+import { Role } from 'src/roles/entities/role.entity';
+import { RoleEnum } from 'src/roles/roles.enum';
 import { Session } from 'src/session/entities/session.entity';
+import { SessionService } from 'src/session/session.service';
+import { SocialInterface } from 'src/social/interfaces/social.interface';
+import { Status } from 'src/statuses/entities/status.entity';
+import { StatusEnum } from 'src/statuses/statuses.enum';
+import { UsersService } from 'src/users/users.service';
+import { User } from '../users/entities/user.entity';
+import { NullableType } from '../utils/types/nullable.type';
+import { AuthProvidersEnum } from './auth-providers.enum';
+import { AuthEmailLoginDto } from './dto/auth-email-login.dto';
+import { AuthRegisterLoginDto } from './dto/auth-register-login.dto';
+import { AuthUpdateDto } from './dto/auth-update.dto';
 import { JwtPayloadType } from './strategies/types/jwt-payload.type';
+import { JwtRefreshPayloadType } from './strategies/types/jwt-refresh-payload.type';
+import { LoginResponseType } from './types/login-response.type';
 
 @Injectable()
 export class AuthService {
@@ -388,6 +388,7 @@ export class AuthService {
         id: data.sessionId,
       },
     });
+    console.log('🚀 ~ session:', session);
 
     if (!session) {
       throw new UnauthorizedException();
