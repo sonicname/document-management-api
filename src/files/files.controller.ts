@@ -24,6 +24,7 @@ import { FilesService } from './files.service';
 import { infinityPagination } from 'src/utils/infinity-pagination';
 import { FileEntity } from './entities/file.entity';
 import { UpdateFileDto } from './dto/update-files.dtos';
+
 @ApiTags('Files')
 @Controller({
   path: 'files',
@@ -68,7 +69,6 @@ export class FilesController {
     if (limit > 50) {
       limit = 50;
     }
-    console.log(req.user.id);
     return infinityPagination(
       await this.filesService.getFileWithPagination(
         {

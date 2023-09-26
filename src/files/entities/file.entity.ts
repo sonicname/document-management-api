@@ -16,6 +16,7 @@ import { EntityHelper } from 'src/utils/entity-helper';
 import appConfig from '../../config/app.config';
 import { AppConfig } from 'src/config/config.type';
 import { User } from 'src/users/entities/user.entity';
+import { PostEntity } from 'src/post/post.entity';
 
 @Entity({ name: 'file' })
 export class FileEntity extends EntityHelper {
@@ -30,9 +31,16 @@ export class FileEntity extends EntityHelper {
   @Column({ name: 'uploader_id', type: 'integer' })
   uploaderId: number;
 
+  @Column({ name: 'post_id', type: 'uuid', nullable: true })
+  postId: number;
+
   @JoinColumn({ name: 'uploader_id' })
   @ManyToOne(() => User, (uploader) => uploader.file)
   uploader: User;
+
+  @JoinColumn({ name: 'post_id' })
+  @ManyToOne(() => User, (post) => post.file)
+  post: PostEntity;
 
   @CreateDateColumn()
   createdAt: Date;

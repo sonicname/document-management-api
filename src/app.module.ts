@@ -20,6 +20,8 @@ import { MailModule } from './mail/mail.module';
 import { MailerModule } from './mailer/mailer.module';
 import { SessionModule } from './session/session.module';
 import { UsersModule } from './users/users.module';
+import { PostModule } from './post/post.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -65,6 +67,8 @@ import { UsersModule } from './users/users.module';
     MailModule,
     MailerModule,
     HomeModule,
+    PostModule,
+    ReviewModule,
   ],
 })
 export class AppModule {}
