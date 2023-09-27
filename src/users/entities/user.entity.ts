@@ -19,6 +19,7 @@ import bcrypt from 'bcryptjs';
 import { EntityHelper } from 'src/utils/entity-helper';
 import { AuthProvidersEnum } from 'src/auth/auth-providers.enum';
 import { Exclude, Expose } from 'class-transformer';
+import { ReviewEntity } from 'src/review/review.entity';
 
 @Entity()
 export class User extends EntityHelper {
@@ -73,6 +74,11 @@ export class User extends EntityHelper {
     eager: true,
   })
   file?: FileEntity[] | null;
+
+  @OneToMany(() => ReviewEntity, (Review) => Review.user, {
+    eager: true,
+  })
+  review?: ReviewEntity[] | null;
 
   @ManyToOne(() => Role, {
     eager: true,

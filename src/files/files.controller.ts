@@ -47,7 +47,7 @@ export class FilesController {
     },
   })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(
+  uploadFile(
     @UploadedFile() file: Express.Multer.File | Express.MulterS3.File,
     @Req() req,
   ) {
@@ -67,6 +67,7 @@ export class FilesController {
     if (limit > 50) {
       limit = 50;
     }
+    console.log(req.user.id);
     return await this.filesService.getFileWithPagination(
       {
         page,
