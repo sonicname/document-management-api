@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { I18nContext } from 'nestjs-i18n';
-import { MailData } from './interfaces/mail-data.interface';
-import { AllConfigType } from 'src/config/config.type';
-import { MaybeType } from '../utils/types/maybe.type';
-import { MailerService } from 'src/mailer/mailer.service';
 import path from 'path';
+import { AllConfigType } from 'src/config/config.type';
+import { MailerService } from 'src/mailer/mailer.service';
+import { MaybeType } from '../utils/types/maybe.type';
+import { MailData } from './interfaces/mail-data.interface';
 
 @Injectable()
 export class MailService {
@@ -35,7 +35,7 @@ export class MailService {
       subject: emailConfirmTitle,
       text: `${this.configService.get('app.frontendDomain', {
         infer: true,
-      })}/confirm-email?hash=${mailData.data.hash} ${emailConfirmTitle}`,
+      })}/auth/confirm?hash=${mailData.data.hash} ${emailConfirmTitle}`,
       templatePath: path.join(
         this.configService.getOrThrow('app.workingDirectory', {
           infer: true,
@@ -49,7 +49,7 @@ export class MailService {
         title: emailConfirmTitle,
         url: `${this.configService.get('app.frontendDomain', {
           infer: true,
-        })}/confirm-email?hash=${mailData.data.hash}`,
+        })}/auth/confirm?hash=${mailData.data.hash}`,
         actionTitle: emailConfirmTitle,
         app_name: this.configService.get('app.name', { infer: true }),
         text1,
@@ -82,7 +82,7 @@ export class MailService {
       subject: resetPasswordTitle,
       text: `${this.configService.get('app.frontendDomain', {
         infer: true,
-      })}/password-change?hash=${mailData.data.hash} ${resetPasswordTitle}`,
+      })}/auth/reset-password?hash=${mailData.data.hash} ${resetPasswordTitle}`,
       templatePath: path.join(
         this.configService.getOrThrow('app.workingDirectory', {
           infer: true,
@@ -96,7 +96,7 @@ export class MailService {
         title: resetPasswordTitle,
         url: `${this.configService.get('app.frontendDomain', {
           infer: true,
-        })}/password-change?hash=${mailData.data.hash}`,
+        })}/auth/reset-password?hash=${mailData.data.hash}`,
         actionTitle: resetPasswordTitle,
         app_name: this.configService.get('app.name', {
           infer: true,
