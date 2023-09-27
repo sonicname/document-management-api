@@ -1,6 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
+import { paginate } from 'nestjs-typeorm-paginate';
 import { AllConfigType } from 'src/config/config.type';
 import { UsersService } from 'src/users/users.service';
 import { IPaginationOptions } from 'src/utils/types/pagination-options';
@@ -52,13 +53,19 @@ export class FilesService {
   async getFileWithPagination(
     paginationOptions: IPaginationOptions,
     uploaderId: FileEntity['uploaderId'],
-  ): Promise<FileEntity[]> {
-    return this.fileRepository.find({
-      where: { deletedAt: IsNull(), uploaderId },
-      take: paginationOptions.limit,
-      skip: (paginationOptions.page - 1) * paginationOptions.limit,
-    });
+  ) {
+    return paginate(
+      this.fileRepository,
+      {
+        limit: paginationOptions.limit,
+        page: paginationOptions.page,
+      },
+      {
+        where: { deletedAt: IsNull(), uploaderId },
+      },
+    );
   }
+
   async getOneById(id: FileEntity['id']): Promise<FileEntity> {
     const file = await this.fileRepository.query(
       `select * from file where id = '${id}' limit 1`,

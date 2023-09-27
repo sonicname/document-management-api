@@ -1,29 +1,28 @@
 import {
-  Patch,
+  Body,
   Controller,
+  DefaultValuePipe,
+  Delete,
   Get,
+  HttpCode,
+  HttpStatus,
   Param,
+  ParseIntPipe,
+  Patch,
   Post,
+  Query,
+  Req,
   Response,
   UploadedFile,
   UseGuards,
   UseInterceptors,
-  Req,
-  Query,
-  DefaultValuePipe,
-  ParseIntPipe,
-  HttpCode,
-  HttpStatus,
-  Body,
-  Delete,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
-import { AuthGuard } from '@nestjs/passport';
-import { FilesService } from './files.service';
-import { infinityPagination } from 'src/utils/infinity-pagination';
-import { FileEntity } from './entities/file.entity';
 import { UpdateFileDto } from './dto/update-files.dtos';
+import { FileEntity } from './entities/file.entity';
+import { FilesService } from './files.service';
 @ApiTags('Files')
 @Controller({
   path: 'files',
@@ -48,7 +47,7 @@ export class FilesController {
     },
   })
   @UseInterceptors(FileInterceptor('file'))
-  async uploadFile(
+  uploadFile(
     @UploadedFile() file: Express.Multer.File | Express.MulterS3.File,
     @Req() req,
   ) {
@@ -69,15 +68,12 @@ export class FilesController {
       limit = 50;
     }
     console.log(req.user.id);
-    return infinityPagination(
-      await this.filesService.getFileWithPagination(
-        {
-          page,
-          limit,
-        },
-        req.user.id,
-      ),
-      { page, limit },
+    return await this.filesService.getFileWithPagination(
+      {
+        page,
+        limit,
+      },
+      req.user.id,
     );
   }
 
