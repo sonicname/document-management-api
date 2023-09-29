@@ -3,9 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { EntityCondition } from 'src/utils/types/entity-condition.type';
 import { IPaginationOptions } from 'src/utils/types/pagination-options';
 import { DeepPartial, Repository } from 'typeorm';
+import { NullableType } from '../utils/types/nullable.type';
 import { CreateUserDto } from './dto/create-user.dto';
 import { User } from './entities/user.entity';
-import { NullableType } from '../utils/types/nullable.type';
 
 @Injectable()
 export class UsersService {
@@ -44,7 +44,7 @@ export class UsersService {
     );
   }
 
-  async updatePhoto(photoId, userId) {
+  async updatePhoto(photoId: string, userId: number) {
     await this.usersRepository.query(`update "user"
         set "photoId" = '${photoId}'
         where id = ${userId}`);

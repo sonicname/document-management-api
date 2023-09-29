@@ -1,25 +1,24 @@
 import {
-  Patch,
+  Body,
   Controller,
-  Get,
-  Param,
-  Post,
-  UseGuards,
-  Query,
   DefaultValuePipe,
-  ParseIntPipe,
+  Delete,
+  Get,
   HttpCode,
   HttpStatus,
-  Body,
-  Delete,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { AuthGuard } from '@nestjs/passport';
-import { infinityPagination } from 'src/utils/infinity-pagination';
-import { PostService } from './post.service';
+import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostEntity } from './post.entity';
+import { PostService } from './post.service';
 
 @ApiTags('post')
 @Controller({
@@ -40,20 +39,17 @@ export class PostController {
 
   @Get('')
   @HttpCode(HttpStatus.OK)
-  async findAll(
+  findAll(
     @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
   ) {
     if (limit > 50) {
       limit = 50;
     }
-    return infinityPagination(
-      await this.postService.getPostWithPagination({
-        page,
-        limit,
-      }),
-      { page, limit },
-    );
+    return this.postService.getPostWithPagination({
+      limit,
+      page,
+    });
   }
 
   @Patch(':id')

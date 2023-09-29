@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common';
-import { Repository, IsNull } from 'typeorm';
-import { PostEntity } from './post.entity';
-import { UpdatePostDto } from './dto/update-post.dto';
-import { CreatePostDto } from './dto/create-post.dto';
 import { InjectRepository } from '@nestjs/typeorm';
+import { paginate } from 'nestjs-typeorm-paginate';
 import { IPaginationOptions } from 'src/utils/types/pagination-options';
+import { IsNull, Repository } from 'typeorm';
+import { CreatePostDto } from './dto/create-post.dto';
+import { UpdatePostDto } from './dto/update-post.dto';
+import { PostEntity } from './post.entity';
 
 @Injectable()
 export class PostService {
@@ -18,14 +19,17 @@ export class PostService {
       await this.postRepository.create(createPostDto),
     );
   }
-  async getPostWithPagination(
-    paginationOptions: IPaginationOptions,
-  ): Promise<PostEntity[]> {
-    return this.postRepository.find({
-      where: { deletedAt: IsNull() },
-      take: paginationOptions.limit,
-      skip: (paginationOptions.page - 1) * paginationOptions.limit,
-    });
+  async getPostWithPagination(paginationOptions: IPaginationOptions) {
+    return paginate(
+      this.postRepository,
+      {
+        limit: paginationOptions.limit,
+        page: paginationOptions.page,
+      },
+      {
+        where: { deletedAt: IsNull() },
+      },
+    );
   }
 
   async getOneById(id: PostEntity['id']): Promise<PostEntity> {
