@@ -22,6 +22,7 @@ import { SessionModule } from './session/session.module';
 import { UsersModule } from './users/users.module';
 import { PostModule } from './post/post.module';
 import { ReviewModule } from './review/review.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -69,6 +70,7 @@ import { ReviewModule } from './review/review.module';
     HomeModule,
     PostModule,
     ReviewModule,
+    CategoryModule,
   ],
 })
 export class AppModule {}
