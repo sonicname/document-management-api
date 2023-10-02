@@ -11,6 +11,7 @@ import { EntityHelper } from 'src/utils/entity-helper';
 import { ApiProperty } from '@nestjs/swagger';
 import { FileEntity } from 'src/files/entities/file.entity';
 import { ReviewEntity } from 'src/review/review.entity';
+import { CategoriesPostEntity } from 'src/category/entities/categories-post.entity';
 
 @Entity({ name: 'post' })
 export class PostEntity extends EntityHelper {
@@ -35,6 +36,12 @@ export class PostEntity extends EntityHelper {
 
   @OneToMany(() => FileEntity, (File) => File.post)
   file: FileEntity;
+
+  @OneToMany(
+    () => CategoriesPostEntity,
+    (CategoriesPost) => CategoriesPost.post,
+  )
+  categoriesPost: CategoriesPostEntity;
 
   @CreateDateColumn()
   createdAt: Date;
