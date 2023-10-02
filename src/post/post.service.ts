@@ -6,19 +6,26 @@ import { IsNull, Repository } from 'typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { PostEntity } from './post.entity';
+import { CategoryService } from 'src/category/category.service';
 
 @Injectable()
 export class PostService {
   constructor(
     @InjectRepository(PostEntity)
     private readonly postRepository: Repository<PostEntity>,
+    private readonly categoryServicce: CategoryService,
   ) {}
 
   async createPost(createPostDto: CreatePostDto): Promise<void> {
-    await this.postRepository.save(
+    const newPost = await this.postRepository.save(
       await this.postRepository.create(createPostDto),
     );
+    await this.categoryServicce.createCategoryPost({
+      categoryIds: createPostDto.categoryIds,
+      postId: newPost.id,
+    });
   }
+
   async getPostWithPagination(paginationOptions: IPaginationOptions) {
     return paginate(
       this.postRepository,

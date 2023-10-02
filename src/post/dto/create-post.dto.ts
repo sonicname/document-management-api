@@ -13,4 +13,8 @@ export class CreatePostDto {
   @ApiProperty({ example: 'example description' })
   @IsOptional()
   description: string;
+
+  @ApiProperty({ example: '7f408a6e-15ed-449c-a4fc-4c2386e56797' })
+  @IsOptional()
+  categoryIds: string[];
 }

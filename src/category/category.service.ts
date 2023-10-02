@@ -1,12 +1,8 @@
 import { CategoriesEntity } from './entities/category.entity';
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { paginate } from 'nestjs-typeorm-paginate';
-import { AllConfigType } from 'src/config/config.type';
-import { UsersService } from 'src/users/users.service';
 import { IPaginationOptions } from 'src/utils/types/pagination-options';
-import { IsNull, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { CategoriesPostEntity } from './entities/categories-post.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { CreateCategoryPostDto } from './dto/create-categories-post.dto';

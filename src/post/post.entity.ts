@@ -6,6 +6,8 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   OneToMany,
+  OneToOne,
+  JoinColumn,
 } from 'typeorm';
 import { EntityHelper } from 'src/utils/entity-helper';
 import { ApiProperty } from '@nestjs/swagger';
@@ -19,8 +21,8 @@ export class PostEntity extends EntityHelper {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'file_id', type: 'uuid' })
-  file_id: string;
+  @Column({ name: 'thumbnail_id', type: 'uuid', nullable: true })
+  thumbnailId: string;
 
   @Column({ name: 'title', type: 'varchar' })
   title: string;
@@ -42,6 +44,10 @@ export class PostEntity extends EntityHelper {
     (CategoriesPost) => CategoriesPost.post,
   )
   categoriesPost: CategoriesPostEntity;
+
+  @JoinColumn({ name: 'thumbnail_id' })
+  @OneToOne(() => FileEntity, (File) => File.thumbnail)
+  thumbnail: FileEntity;
 
   @CreateDateColumn()
   createdAt: Date;
