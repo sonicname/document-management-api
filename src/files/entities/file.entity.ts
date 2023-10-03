@@ -9,6 +9,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  OneToOne,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { Allow } from 'class-validator';
@@ -32,15 +33,18 @@ export class FileEntity extends EntityHelper {
   uploaderId: number;
 
   @Column({ name: 'post_id', type: 'uuid', nullable: true })
-  postId: number;
+  postId: string;
 
   @JoinColumn({ name: 'uploader_id' })
   @ManyToOne(() => User, (uploader) => uploader.file)
   uploader: User;
 
   @JoinColumn({ name: 'post_id' })
-  @ManyToOne(() => User, (post) => post.file)
+  @ManyToOne(() => PostEntity, (post) => post.file)
   post: PostEntity;
+
+  @OneToOne(() => FileEntity, (File) => File.thumbnail)
+  thumbnail: FileEntity;
 
   @CreateDateColumn()
   createdAt: Date;

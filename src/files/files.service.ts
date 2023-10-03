@@ -8,6 +8,8 @@ import { IPaginationOptions } from 'src/utils/types/pagination-options';
 import { IsNull, Repository } from 'typeorm';
 import { UpdateFileDto } from './dto/update-files.dtos';
 import { FileEntity } from './entities/file.entity';
+import { extname } from 'path';
+
 @Injectable()
 export class FilesService {
   constructor(
@@ -32,7 +34,19 @@ export class FilesService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-
+    const allowedExtensions = ['.docs', '.pdf', '.docx'];
+    const fileExtension = extname(file.originalname).toLowerCase();
+    if (!allowedExtensions.includes(fileExtension)) {
+      throw new HttpException(
+        {
+          status: HttpStatus.UNPROCESSABLE_ENTITY,
+          errors: {
+            file: 'Invalid file format. Only .docs ,.pdf and .docx are allowed.',
+          },
+        },
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
     const path = {
       local: `/${this.configService.get('app.apiPrefix', { infer: true })}/v1/${
         file.path
