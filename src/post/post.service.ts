@@ -78,7 +78,7 @@ export class PostService {
 
   async getOneById(id: PostEntity['id']): Promise<PostEntity> {
     const post = await this.postRepository.query(
-      `select * from post where id = '${id}' limit 1`,
+      `select * from post where id = '${id}' limit 1;`,
     );
     return post;
   }
