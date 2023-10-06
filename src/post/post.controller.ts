@@ -30,7 +30,6 @@ import { PostService } from './post.service';
 export class PostController {
   constructor(private readonly postService: PostService) {}
 
-  @ApiBearerAuth()
   @Post('upload')
   @HttpCode(HttpStatus.CREATED)
   async newPost(@Body() createPostDto: CreatePostDto): Promise<void> {
@@ -46,7 +45,23 @@ export class PostController {
     if (limit > 50) {
       limit = 50;
     }
-    return this.postService.getPostWithPagination({
+    return this.postService.getAllPostWithPagination({
+      limit,
+      page,
+    });
+  }
+
+  @Get(':id')
+  @HttpCode(HttpStatus.OK)
+  findByCategoyId(
+    @Param('id') id: string,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
+  ) {
+    if (limit > 50) {
+      limit = 50;
+    }
+    return this.postService.findPostByCategoryId(id, {
       limit,
       page,
     });

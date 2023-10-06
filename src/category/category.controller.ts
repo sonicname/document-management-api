@@ -1,21 +1,19 @@
 import {
   Body,
   Controller,
-  DefaultValuePipe,
-  Get,
   HttpCode,
   HttpStatus,
-  ParseIntPipe,
   Post,
-  Query,
   UseGuards,
+  Patch,
+  Param,
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { CreateCategoryPostDto } from './dto/create-categories-post.dto';
-import { FindPostDto } from './dto/find-post.dto';
+import { UpdateCategoryDto } from './dto/update-categories.dto';
 
 @ApiTags('category')
 @Controller({
@@ -35,6 +33,7 @@ export class CategoryController {
   ): Promise<void> {
     await this.categoryService.createCategory(createCategoryDto);
   }
+
   @Post('new')
   @HttpCode(HttpStatus.CREATED)
   async new(
@@ -43,19 +42,12 @@ export class CategoryController {
     await this.categoryService.createCategoryPost(createCategoryPostDto);
   }
 
-  @Get('')
+  @Patch(':id')
   @HttpCode(HttpStatus.OK)
-  findAll(
-    @Query() findPostDto: FindPostDto,
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number,
-  ) {
-    if (limit > 50) {
-      limit = 50;
-    }
-    return this.categoryService.findByCategoryId(findPostDto, {
-      limit,
-      page,
-    });
+  update(
+    @Param('id') id: string,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+  ): Promise<void> {
+    return this.categoryService.update(id, updateCategoryDto);
   }
 }

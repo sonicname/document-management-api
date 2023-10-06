@@ -1,13 +1,12 @@
 import { CategoriesEntity } from './entities/category.entity';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { IPaginationOptions } from 'src/utils/types/pagination-options';
+import {} from 'src/utils/types/pagination-options';
 import { Repository } from 'typeorm';
 import { CategoriesPostEntity } from './entities/categories-post.entity';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { CreateCategoryPostDto } from './dto/create-categories-post.dto';
-import { PostEntity } from 'src/post/post.entity';
-import { FindPostDto } from './dto/find-post.dto';
+import { UpdateCategoryDto } from './dto/update-categories.dto';
 @Injectable()
 export class CategoryService {
   constructor(
@@ -33,22 +32,20 @@ export class CategoryService {
       );
     }
   }
-
-  async findByCategoryId(
-    findPostDto: FindPostDto,
-    paginationOptions: IPaginationOptions,
-  ): Promise<PostEntity> {
-    const categoryIds = findPostDto.categoryIds
-      .map((id) => `'${id}'`)
-      .join(',');
-    const posts = this.categoryRepository.query(`
-        SELECT DISTINCT p.*
-        FROM post p
-        INNER JOIN categories_post pc ON p.id = pc.post_id
-        WHERE pc.category_id IN (${categoryIds})
-        LIMIT ${paginationOptions.limit}
-        OFFSET ${(paginationOptions.page - 1) * paginationOptions.limit}
-        `);
-    return posts;
+  async update(
+    id: CategoriesEntity['id'],
+    updateCategoryDto: UpdateCategoryDto,
+  ): Promise<void> {
+    const { categoriesPost, ...CategoryDto } = updateCategoryDto;
+    await this.categoryRepository.update(id, CategoryDto);
+    if (updateCategoryDto.categoriesPost) {
+      for (const newCategoryDto of categoriesPost) {
+        const { CategoryPostId, ...CategoriesPostDto } = newCategoryDto;
+        await this.categoryPostRepository.update(
+          CategoryPostId,
+          CategoriesPostDto,
+        );
+      }
+    }
   }
 }
