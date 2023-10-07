@@ -19,11 +19,11 @@ export class ReviewEntity extends EntityHelper {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ name: 'user_id', type: 'int' })
-  user_id: string;
+  @Column({ name: 'user_id', type: 'integer' })
+  userId: number;
 
   @Column({ name: 'post_id', type: 'uuid' })
-  post_id: string;
+  postId: string;
 
   @Column({ name: 'rating', type: 'integer' })
   rating: number;
