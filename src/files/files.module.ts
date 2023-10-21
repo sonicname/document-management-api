@@ -1,20 +1,18 @@
-import { HttpException, HttpStatus, Module } from '@nestjs/common';
-import { FilesController } from './files.controller';
-import { MulterModule } from '@nestjs/platform-express';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { diskStorage } from 'multer';
-import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
 import { S3Client } from '@aws-sdk/client-s3';
-import multerS3 from 'multer-s3';
+import { HttpException, HttpStatus, Module } from '@nestjs/common';
+import { randomStringGenerator } from '@nestjs/common/utils/random-string-generator.util';
+import { ConfigModule, ConfigService } from '@nestjs/config';
+import { MulterModule } from '@nestjs/platform-express';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { FileEntity } from './entities/file.entity';
-import { FilesService } from './files.service';
+import { diskStorage } from 'multer';
+import multerS3 from 'multer-s3';
 import { AllConfigType } from 'src/config/config.type';
-import { UsersModule } from 'src/users/users.module';
+import { FileEntity } from './entities/file.entity';
+import { FilesController } from './files.controller';
+import { FilesService } from './files.service';
 
 @Module({
   imports: [
-    UsersModule,
     TypeOrmModule.forFeature([FileEntity]),
     MulterModule.registerAsync({
       imports: [ConfigModule],
@@ -70,7 +68,11 @@ import { UsersModule } from 'src/users/users.module';
 
         return {
           fileFilter: (request, file, callback) => {
-            if (!file.originalname.match(/\.(jpg|jpeg|png|gif)$/i)) {
+            if (
+              !file.originalname.match(
+                /\.(jpg|jpeg|png|gif|docs|docx|pptx|pdf)$/i,
+              )
+            ) {
               return callback(
                 new HttpException(
                   {
@@ -100,5 +102,6 @@ import { UsersModule } from 'src/users/users.module';
   ],
   controllers: [FilesController],
   providers: [ConfigModule, ConfigService, FilesService],
+  exports: [FilesService],
 })
 export class FilesModule {}

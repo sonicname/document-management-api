@@ -1,23 +1,15 @@
+import { ApiProperty } from '@nestjs/swagger';
+import { Allow } from 'class-validator';
+import { AppConfig } from 'src/config/config.type';
+import { EntityHelper } from 'src/utils/entity-helper';
 import {
+  AfterInsert,
+  AfterLoad,
   Column,
   Entity,
   PrimaryGeneratedColumn,
-  AfterLoad,
-  AfterInsert,
-  ManyToOne,
-  JoinColumn,
-  CreateDateColumn,
-  UpdateDateColumn,
-  DeleteDateColumn,
-  OneToOne,
 } from 'typeorm';
-import { ApiProperty } from '@nestjs/swagger';
-import { Allow } from 'class-validator';
-import { EntityHelper } from 'src/utils/entity-helper';
 import appConfig from '../../config/app.config';
-import { AppConfig } from 'src/config/config.type';
-import { User } from 'src/users/entities/user.entity';
-import { PostEntity } from 'src/post/post.entity';
 
 @Entity({ name: 'file' })
 export class FileEntity extends EntityHelper {
@@ -28,32 +20,6 @@ export class FileEntity extends EntityHelper {
   @Allow()
   @Column()
   path: string;
-
-  @Column({ name: 'uploader_id', type: 'integer' })
-  uploaderId: number;
-
-  @Column({ name: 'post_id', type: 'uuid', nullable: true })
-  postId: string;
-
-  @JoinColumn({ name: 'uploader_id' })
-  @ManyToOne(() => User, (uploader) => uploader.file)
-  uploader: User;
-
-  @JoinColumn({ name: 'post_id' })
-  @ManyToOne(() => PostEntity, (post) => post.file)
-  post: PostEntity;
-
-  @OneToOne(() => FileEntity, (File) => File.thumbnail)
-  thumbnail: FileEntity;
-
-  @CreateDateColumn()
-  createdAt: Date;
-
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date;
 
   @AfterLoad()
   @AfterInsert()

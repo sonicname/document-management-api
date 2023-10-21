@@ -1,5 +1,6 @@
-import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
+import { ApiProperty } from '@nestjs/swagger';
+import { Role } from '../../roles/entities/role.entity';
 import {
   IsEmail,
   IsNotEmpty,
@@ -7,12 +8,11 @@ import {
   MinLength,
   Validate,
 } from 'class-validator';
-import { FileEntity } from 'src/files/entities/file.entity';
 import { Status } from 'src/statuses/entities/status.entity';
-import { lowerCaseTransformer } from 'src/utils/transformers/lower-case.transformer';
-import { IsExist } from 'src/utils/validators/is-exists.validator';
 import { IsNotExist } from 'src/utils/validators/is-not-exists.validator';
-import { Role } from '../../roles/entities/role.entity';
+import { FileEntity } from 'src/files/entities/file.entity';
+import { IsExist } from 'src/utils/validators/is-exists.validator';
+import { lowerCaseTransformer } from 'src/utils/transformers/lower-case.transformer';
 
 export class CreateUserDto {
   @ApiProperty({ example: 'test1@example.com' })
@@ -46,13 +46,6 @@ export class CreateUserDto {
     message: 'imageNotExists',
   })
   photo?: FileEntity | null;
-
-  @ApiProperty({ type: () => FileEntity })
-  @IsOptional()
-  @Validate(IsExist, ['FileEntity', 'id'], {
-    message: 'imageNotExists',
-  })
-  avatar?: FileEntity | null;
 
   @ApiProperty({ type: Role })
   @Validate(IsExist, ['Role', 'id'], {

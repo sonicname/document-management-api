@@ -18,11 +18,12 @@ import { ForgotModule } from './forgot/forgot.module';
 import { HomeModule } from './home/home.module';
 import { MailModule } from './mail/mail.module';
 import { MailerModule } from './mailer/mailer.module';
+
+import { CategoryPostModule } from './category-post/category-post.module';
+import { DocumentPostModule } from './document-post/document-post.module';
+import { ReviewPostModule } from './review-post/review-post.module';
 import { SessionModule } from './session/session.module';
 import { UsersModule } from './users/users.module';
-import { PostModule } from './post/post.module';
-import { ReviewModule } from './review/review.module';
-import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -68,9 +69,9 @@ import { CategoryModule } from './category/category.module';
     MailModule,
     MailerModule,
     HomeModule,
-    PostModule,
-    ReviewModule,
-    CategoryModule,
+    DocumentPostModule,
+    CategoryPostModule,
+    ReviewPostModule,
   ],
 })
 export class AppModule {}

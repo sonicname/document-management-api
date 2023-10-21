@@ -35,7 +35,7 @@ export class MailService {
       subject: emailConfirmTitle,
       text: `${this.configService.get('app.frontendDomain', {
         infer: true,
-      })}/auth/confirm?hash=${mailData.data.hash} ${emailConfirmTitle}`,
+      })}/auth/confirm?hash=${mailData.data.hash}`,
       templatePath: path.join(
         this.configService.getOrThrow('app.workingDirectory', {
           infer: true,
@@ -82,7 +82,7 @@ export class MailService {
       subject: resetPasswordTitle,
       text: `${this.configService.get('app.frontendDomain', {
         infer: true,
-      })}/auth/reset-password?hash=${mailData.data.hash} ${resetPasswordTitle}`,
+      })}/auth/reset-password?hash=${mailData.data.hash}`,
       templatePath: path.join(
         this.configService.getOrThrow('app.workingDirectory', {
           infer: true,

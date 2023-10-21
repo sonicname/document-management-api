@@ -1,27 +1,23 @@
-import bcrypt from 'bcryptjs';
-import { Exclude, Expose } from 'class-transformer';
-import { AuthProvidersEnum } from 'src/auth/auth-providers.enum';
-import { ReviewEntity } from 'src/review/review.entity';
-import { EntityHelper } from 'src/utils/entity-helper';
 import {
-  AfterLoad,
-  BeforeInsert,
-  BeforeUpdate,
   Column,
+  AfterLoad,
   CreateDateColumn,
   DeleteDateColumn,
   Entity,
   Index,
-  JoinColumn,
   ManyToOne,
-  OneToMany,
-  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  BeforeInsert,
+  BeforeUpdate,
 } from 'typeorm';
-import { FileEntity } from '../../files/entities/file.entity';
 import { Role } from '../../roles/entities/role.entity';
 import { Status } from '../../statuses/entities/status.entity';
+import { FileEntity } from '../../files/entities/file.entity';
+import bcrypt from 'bcryptjs';
+import { EntityHelper } from 'src/utils/entity-helper';
+import { AuthProvidersEnum } from 'src/auth/auth-providers.enum';
+import { Exclude, Expose } from 'class-transformer';
 
 @Entity()
 export class User extends EntityHelper {
@@ -72,21 +68,10 @@ export class User extends EntityHelper {
   @Column({ type: String, nullable: true })
   lastName: string | null;
 
-  @OneToOne(() => FileEntity, {
+  @ManyToOne(() => FileEntity, {
     eager: true,
   })
-  @JoinColumn()
-  avatar?: FileEntity | null;
-
-  @OneToMany(() => FileEntity, (file) => file.uploader, {
-    eager: true,
-  })
-  file?: FileEntity[] | null;
-
-  @OneToMany(() => ReviewEntity, (Review) => Review.user, {
-    eager: true,
-  })
-  review?: ReviewEntity[] | null;
+  photo?: FileEntity | null;
 
   @ManyToOne(() => Role, {
     eager: true,
