@@ -68,11 +68,7 @@ import { FilesService } from './files.service';
 
         return {
           fileFilter: (request, file, callback) => {
-            if (
-              !file.originalname.match(
-                /\.(jpg|jpeg|png|gif|docs|docx|pptx|pdf)$/i,
-              )
-            ) {
+            if (!file.originalname.match(/\.(jpg|jpeg|png|gif||mp4|mkv)$/i)) {
               return callback(
                 new HttpException(
                   {
